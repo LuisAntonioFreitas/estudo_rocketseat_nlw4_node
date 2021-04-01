@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { getConnection } from 'typeorm';
-import { app } from "../app";
+import { app, caminho } from "../app";
 
 import createConnection from "../database";
 
@@ -17,7 +17,7 @@ describe("Surveys", async () => {
   // });
 
   it("criando uma enquete na tabela surveys", async () => {
-    const response = await request(app).post("/surveys")
+    const response = await request(app).post(caminho + "/surveys")
     .send({ 
       title: "Title Example", 
       description: "Description Example"
@@ -27,7 +27,7 @@ describe("Surveys", async () => {
   });
 
   it("não criando uma enquete na tabela surveys por duplicação de title", async () => {
-    const response = await request(app).post("/surveys")
+    const response = await request(app).post(caminho + "/surveys")
     .send({ 
       title: "Title Example", 
       description: "Description Example"
@@ -37,13 +37,13 @@ describe("Surveys", async () => {
   });
 
   it("mostrando uma lista de enquetes da tabela surveys", async () => {
-    await request(app).post("/surveys")
+    await request(app).post(caminho + "/surveys")
     .send({ 
       title: "Title Example 2", 
       description: "Description Example 2"
     });
 
-    const response = await request(app).get("/surveys");
+    const response = await request(app).get(caminho + "/surveys");
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(2);
   });

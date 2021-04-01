@@ -1,3 +1,7 @@
-import { app } from "./app";
+import { app } from './app';
 
-app.listen(3333, () => console.log("Server is running!"));
+const identification = process.env.NODE_ENV?.trim().toLowerCase();
+const port = process.env.PORT;
+const url = process.env.URL;
+
+app.listen(port, () => console.log(`Server '${identification}' on port ${port} is running!\n${url}`)); 

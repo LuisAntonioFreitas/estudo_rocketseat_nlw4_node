@@ -1,0 +1,38 @@
+<configuration>
+    <system.webServer>
+        <rewrite>
+            <rules>	
+                <rule name="Lower Case Rule" stopProcessing="true">
+                    <match url="[A-Z]" ignoreCase="false" />
+                    <action type="Redirect" url="{ToLower:{URL}}" />
+                </rule>
+                <rule name="Canonical Host Name Rule">
+                    <match url="(.*)" />
+                    <conditions>
+                        <add input="{HTTP_HOST}" pattern="^localhost:3333$" negate="true" />
+                    </conditions>
+                    <action type="Redirect" url="http://localhost:3333/{R:1}" />
+                </rule>
+                <rule name="Remove Trailing Slash Rule" stopProcessing="true">
+                    <match url="(.*)/$" />
+                    <conditions>
+                        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+                        <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                    </conditions>
+                    <action type="Redirect" url="{R:1}" />
+                </rule>
+                <rule name="SSL Rule" enabled="true" patternSyntax="Wildcard" stopProcessing="true">
+                    <match url="*" negate="false" />
+                    <conditions logicalGrouping="MatchAny">
+                        <add input="{HTTPS}" pattern="off" />
+                    </conditions>
+                    <action type="Redirect" url="http://localhost:3333{REQUEST_URI}" redirectType="Found" />
+                </rule>			
+                <rule name="Reverse Proxy Rule" stopProcessing="true">
+                    <match url="(.*)" />
+                    <action type="Rewrite" url="http://localhost:3333/{R:1}" />
+                </rule>
+            </rules>
+        </rewrite>
+	</system.webServer>
+</configuration>

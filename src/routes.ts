@@ -15,13 +15,17 @@ const sendMailSurveyUserController = new SendMailSurveyUserController();
 const answerController = new AnswerController();
 const npsController = new NPSController();
 
-router.post("/users", userController.create);
+process.env.PATH = String('api').trim().toLowerCase();
+process.env.VERSION = String('v1').trim().toLowerCase();
+const caminho = String("/" + process.env.PATH + "/" + process.env.VERSION)?.trim().toLowerCase();
 
-router.post("/surveys", surveyController.create);
-router.get("/surveys", surveyController.show);
+router.post(caminho + "/users", userController.create);
 
-router.post("/sendmailsurveysusers", sendMailSurveyUserController.execute);
-router.get("/answers/:value", answerController.execute);
-router.get("/nps/:survey_id", npsController.execute)
+router.post(caminho + "/surveys", surveyController.create);
+router.get(caminho + "/surveys", surveyController.show);
 
-export { router };
+router.post(caminho + "/sendmailsurveysusers", sendMailSurveyUserController.execute);
+router.get(caminho + "/answers/:value", answerController.execute);
+router.get(caminho + "/nps/:survey_id", npsController.execute)
+
+export { router, caminho };

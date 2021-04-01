@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from "../app";
+import { app, caminho } from "../app";
 
 import createConnection from "../database";
 
@@ -16,7 +16,7 @@ describe("Users", async () => {
   // });
 
   it("criando um usuário na tabela users", async () => {
-    const response = await request(app).post("/users")
+    const response = await request(app).post(caminho + "/users")
     .send({ 
       name: "User Example", 
       email: "user@example.com"
@@ -26,7 +26,7 @@ describe("Users", async () => {
   });
 
   it("não criando um usuário na tabela users por duplicação de email", async () => {
-    const response = await request(app).post("/users")
+    const response = await request(app).post(caminho + "/users")
     .send({ 
       name: "User Example", 
       email: "user@example.com"
